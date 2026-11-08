@@ -18,20 +18,28 @@ export const STRATEGIES_LIST: StrategyInfo[] = [
     description: 'Combina victorias de favoritos sólidos con dobles estratégicos en partidos igualados y con dinámicas de racha positiva.'
   },
   {
-    id: 'high_yield',
-    name: 'Cazador de Sorpresas (Botes)',
-    shortDesc: 'Busca rentabilidad y grandes botes',
-    badge: 'Alta Rentabilidad',
-    riskLevel: 'Alto',
-    description: 'La gran mayoría del público sobreapuesta al Madrid, Barça y Atlético. Esta estrategia detecta partidos trampa y cubre empates o victorias visitantes con premios masivos.'
-  },
-  {
     id: 'draw_specialist',
     name: 'Especialista en Empates',
     shortDesc: 'Doble cobertura en máxima paridad',
     badge: 'Táctica X',
     riskLevel: 'Medio',
     description: 'Se enfoca en duelos directos con defensas fuertes y alto porcentaje histórico de reparto de puntos (1X o X2).'
+  },
+  {
+    id: 'poisson_dixon',
+    name: 'Poisson (Dixon-Coles)',
+    shortDesc: 'Matriz estocástica de goles',
+    badge: 'Cuantitativa',
+    riskLevel: 'Medio',
+    description: 'Modela la distribución bivariante de goles con corrección de empates a baja puntuación. Precisión matemática superior en 1X2 y en el Pleno al 15.'
+  },
+  {
+    id: 'expected_value',
+    name: 'Valor Esperado (EV+)',
+    shortDesc: 'Arbitraje contra el público',
+    badge: 'Smart Money',
+    riskLevel: 'Alto',
+    description: 'Compara la probabilidad real con el sesgo del apostador medio. Invierte los dobles y triples en signos infravalorados donde el premio a cobrar supera su riesgo.'
   }
 ];
 

@@ -155,6 +155,21 @@ export const QuinielaResultsModal: React.FC<QuinielaResultsModalProps> = ({
             </div>
           </div>
 
+          {/* Explanation if < 10 hits */}
+          {result.bestHits < 10 && (
+            <div className="bg-amber-500/10 border border-amber-500/30 rounded-xl p-3 flex items-start gap-2.5 text-xs text-amber-200">
+              <span className="text-base select-none">ℹ️</span>
+              <div className="space-y-0.5">
+                <span className="font-bold text-amber-300">
+                  Sin premios en esta jornada ({result.bestHits} de 14 aciertos)
+                </span>
+                <p className="text-[11px] text-amber-200/80">
+                  La normativa oficial de La Quiniela (SELAE) exige un mínimo de <strong>10 aciertos</strong> para entrar en el reparto de premios. Por eso, cualquier jornada que obtenga 9 o menos aciertos cobra 0,00 €.
+                </p>
+              </div>
+            </div>
+          )}
+
           {/* Official Scrutiny Breakdown Table */}
           <div className="bg-slate-950/60 border border-slate-800 rounded-xl overflow-hidden">
             <div className="px-4 py-2.5 bg-slate-800/40 border-b border-slate-800 flex items-center justify-between">

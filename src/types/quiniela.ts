@@ -46,7 +46,12 @@ export interface QuinielaMatch {
   };
 }
 
-export type StrategyType = 'conservative' | 'balanced' | 'high_yield' | 'draw_specialist';
+export type StrategyType = 
+  | 'conservative' 
+  | 'balanced' 
+  | 'draw_specialist' 
+  | 'poisson_dixon' 
+  | 'expected_value';
 
 export interface StrategyInfo {
   id: StrategyType;
@@ -55,6 +60,16 @@ export interface StrategyInfo {
   badge: string;
   riskLevel: 'Bajo' | 'Medio' | 'Alto';
   description: string;
+}
+
+export interface StrategyAccumulatedStats {
+  strategyId: StrategyType;
+  totalInvested: number;
+  totalWon: number;
+  netProfit: number;
+  roiPercentage: number;
+  avgHits: number;
+  completedJornadasCount: number;
 }
 
 export type OfficialReductionId = 

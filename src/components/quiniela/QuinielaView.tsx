@@ -20,26 +20,63 @@ import {
   generateStrategyPicks,
   generateBetsFromReduction,
   createReductionForBudget,
-  evaluateBacktest
+  evaluateBacktest,
+  calculateStrategiesAccumulatedPerformance
 } from '../../services/quinielaEngine';
 import { QuinielaTicket } from './QuinielaTicket';
 import { QuinielaResultsModal } from './QuinielaResultsModal';
 import { QuinielaBetsModal } from './QuinielaBetsModal';
+import { QuinielaBetPredictionPanel } from './QuinielaBetPredictionPanel';
 import {
   Trophy,
   Sliders,
   ShieldCheck,
   RotateCcw,
-  Layers
+  Layers,
+  Wifi,
+  WifiOff,
+  Loader2,
+  TrendingUp,
+  TrendingDown
 } from 'lucide-react';
+import { fetchJornadas, fetchJornada, fetchAllJornadasFull, isBackendOnline, JornadaInfo } from '../../services/apiService';
+
+
 
 export const QuinielaView: React.FC = () => {
-  const allJornadas = useMemo(() => getAllQuinielaJornadas(), []);
-  
+  // Static fallback data
+  const staticJornadas = useMemo(() => getAllQuinielaJornadas(), []);
+
+  // Live data state
+  const [liveJornadas, setLiveJornadas] = useState<JornadaInfo[] | null>(null);
+  const [allLiveJornadas, setAllLiveJornadas] = useState<JornadaQuinielaData[] | null>(null);
+  const [backendOnline, setBackendOnline] = useState<boolean | null>(null);
+  const [loadingJornada, setLoadingJornada] = useState(false);
+  const [liveJornadaData, setLiveJornadaData] = useState<JornadaQuinielaData | null>(null);
+
+  // Active full collection of jornadas (live if available, else static)
+  const activeJornadasCollection = useMemo(() => {
+    return (allLiveJornadas && allLiveJornadas.length > 0) ? allLiveJornadas : staticJornadas;
+  }, [allLiveJornadas, staticJornadas]);
+
+  // Available jornadas for the buttons list
+  const availableJornadasList = useMemo(() => {
+    if (liveJornadas && liveJornadas.length > 0) {
+      return liveJornadas;
+    }
+    return staticJornadas.map(j => ({
+      jornadaNumber: j.jornadaNumber,
+      season: j.season,
+      title: j.title,
+      dateRange: j.dateRange,
+      isCompleted: j.isCompleted,
+    }));
+  }, [liveJornadas, staticJornadas]);
+
   // State
   const [selectedJornadaNumber, setSelectedJornadaNumber] = useState<number>(12);
   const [selectedStrategy, setSelectedStrategy] = useState<StrategyType>('balanced');
-  const [currentReduction, setCurrentReduction] = useState<ReductionConfig>(OFFICIAL_REDUCTIONS[1]); // 7 Dobles al 13 (12€)
+  const [currentReduction, setCurrentReduction] = useState<ReductionConfig>(OFFICIAL_REDUCTIONS[1]);
   const [budgetEur, setBudgetEur] = useState<number>(12.00);
 
   // Ticket Picks State
@@ -52,10 +89,93 @@ export const QuinielaView: React.FC = () => {
   const [isResultsModalOpen, setIsResultsModalOpen] = useState<boolean>(false);
   const [isBetsModalOpen, setIsBetsModalOpen] = useState<boolean>(false);
 
-  // Active Jornada Data
+  // Calculate accumulated profit and performance for each strategy with the current reduction across all completed matchdays
+  const strategiesPerformance = useMemo(() => {
+    return calculateStrategiesAccumulatedPerformance(activeJornadasCollection, currentReduction);
+  }, [activeJornadasCollection, currentReduction]);
+
+  // Quick evaluation map of all jornadas for the current strategy & reduction
+  const jornadasStatusMap = useMemo(() => {
+    const map = new Map<number, { hits: number; won: number; profit: number; isProfitable: boolean }>();
+    for (const j of activeJornadasCollection) {
+      if (!j.isCompleted || !j.scrutiny) continue;
+      const { picks, plenoPick } = generateStrategyPicks(j.matches, selectedStrategy, currentReduction);
+      const bets = generateBetsFromReduction(picks, currentReduction);
+      const ticket = {
+        jornadaNumber: j.jornadaNumber,
+        strategy: selectedStrategy,
+        reduction: currentReduction,
+        basePicks: picks,
+        generatedBets: bets,
+        plenoBet: plenoPick,
+        totalBets: bets.length,
+        totalCost: currentReduction.coste
+      };
+      const res = evaluateBacktest(ticket, j);
+      if (res) {
+        map.set(j.jornadaNumber, {
+          hits: res.bestHits,
+          won: res.totalWon,
+          profit: res.netProfit,
+          isProfitable: res.netProfit > 0
+        });
+      }
+    }
+    return map;
+  }, [activeJornadasCollection, selectedStrategy, currentReduction]);
+
+  // Check backend availability on mount and load jornada list + all full data
+  useEffect(() => {
+    isBackendOnline().then(online => {
+      setBackendOnline(online);
+      if (online) {
+        fetchJornadas()
+          .then(list => {
+            setLiveJornadas(list);
+            if (list.length > 0) {
+              // Auto-select the first upcoming (non-completed) jornada, or last one
+              const nextUpcoming = list.find(item => !item.isCompleted);
+              setSelectedJornadaNumber(
+                nextUpcoming ? nextUpcoming.jornadaNumber : list[list.length - 1].jornadaNumber
+              );
+            }
+          })
+          .catch(err => console.warn('Could not fetch live jornadas list:', err));
+
+        fetchAllJornadasFull()
+          .then(fullList => setAllLiveJornadas(fullList))
+          .catch(err => console.warn('Could not fetch all live full jornadas:', err));
+      } else {
+        // Static fallback: auto-select the first upcoming (non-completed) jornada
+        const nextUpcomingStatic = staticJornadas.find(j => !j.isCompleted);
+        if (nextUpcomingStatic) {
+          setSelectedJornadaNumber(nextUpcomingStatic.jornadaNumber);
+        }
+      }
+    });
+  }, [staticJornadas]);
+
+
+  // Fetch live jornada data when matchday selection changes
+  useEffect(() => {
+    if (!backendOnline) return;
+    setLoadingJornada(true);
+    fetchJornada(selectedJornadaNumber)
+      .then(data => setLiveJornadaData(data))
+      .catch(err => {
+        console.warn('Live fetch failed, falling back to static:', err);
+        setLiveJornadaData(null);
+      })
+      .finally(() => setLoadingJornada(false));
+  }, [selectedJornadaNumber, backendOnline]);
+
+  // Active Jornada Data — prefer live, fall back to static
   const currentJornadaData = useMemo<JornadaQuinielaData>(() => {
-    return getJornadaQuiniela(selectedJornadaNumber) || allJornadas[0];
-  }, [selectedJornadaNumber, allJornadas]);
+    if (liveJornadaData && liveJornadaData.jornadaNumber === selectedJornadaNumber) {
+      return liveJornadaData;
+    }
+    return getJornadaQuiniela(selectedJornadaNumber) || staticJornadas[0];
+  }, [selectedJornadaNumber, liveJornadaData, staticJornadas]);
 
   // Re-generate ticket whenever Jornada, Strategy or Reduction changes
   const regenerateTicket = useCallback((
@@ -66,16 +186,16 @@ export const QuinielaView: React.FC = () => {
     const { picks, plenoPick: initialPleno } = generateStrategyPicks(jData.matches, strat, reduc);
     setBasePicks(picks);
     setPlenoPick(initialPleno);
-
     const bets = generateBetsFromReduction(picks, reduc);
     setGeneratedBets(bets);
-    setBacktestResult(null); // reset backtest when regenerated
+    setBacktestResult(null);
   }, []);
 
-  // Initial load or on Jornada / Strategy change
   useEffect(() => {
-    regenerateTicket(currentJornadaData, selectedStrategy, currentReduction);
-  }, [currentJornadaData, selectedStrategy, currentReduction, regenerateTicket]);
+    if (!loadingJornada) {
+      regenerateTicket(currentJornadaData, selectedStrategy, currentReduction);
+    }
+  }, [currentJornadaData, selectedStrategy, currentReduction, regenerateTicket, loadingJornada]);
 
   // Handle Manual Sign Toggle
   const handleToggleSign = (matchOrder: number, sign: Sign1X2) => {
@@ -175,12 +295,29 @@ export const QuinielaView: React.FC = () => {
 
   return (
     <div className="max-w-7xl mx-auto px-3 sm:px-6 py-4 space-y-5 animate-fade-in">
+
+      {/* Live data status banner */}
+      {backendOnline !== null && (
+        <div className={`flex items-center gap-2 px-3 py-1.5 rounded-lg text-xs font-medium border w-fit
+          ${backendOnline
+            ? 'bg-emerald-500/10 border-emerald-500/30 text-emerald-400'
+            : 'bg-amber-500/10 border-amber-500/30 text-amber-400'
+          }`}>
+          {backendOnline
+            ? <><Wifi className="w-3.5 h-3.5" /><span>Datos reales en vivo · Temporada 2026/27 (LaLiga + Segunda)</span></>
+            : <><WifiOff className="w-3.5 h-3.5" /><span>Datos de muestra · Arranca el backend para datos reales</span></>
+          }
+          {loadingJornada && <Loader2 className="w-3.5 h-3.5 animate-spin ml-1" />}
+        </div>
+      )}
+
       {/* Top Banner / Heading */}
       <div className="bg-gradient-to-r from-rose-950/60 via-slate-900 to-slate-900 border border-rose-500/20 rounded-2xl p-4 sm:p-5 shadow-lg">
         <div className="flex flex-col md:flex-row md:items-center justify-between gap-4">
           <div className="space-y-1">
             <div className="flex items-center gap-2">
               <span className="px-2.5 py-0.5 rounded-full text-[11px] font-extrabold bg-rose-500/20 text-rose-400 border border-rose-500/30 uppercase tracking-wider">
+
                 Motor de Inteligencia & Reducidas
               </span>
               <span className="px-2 py-0.5 rounded-full text-[11px] font-bold bg-amber-500/20 text-amber-400 border border-amber-500/30">
@@ -216,12 +353,12 @@ export const QuinielaView: React.FC = () => {
             1. Seleccionar Jornada de LaLiga
           </span>
           <span className="text-[11px] text-slate-500">
-            {allJornadas.length} jornadas disponibles
+            {availableJornadasList.length} jornadas disponibles
           </span>
         </div>
 
         <div className="flex items-center gap-2 overflow-x-auto pb-1 scrollbar-thin">
-          {allJornadas.map(j => {
+          {availableJornadasList.map(j => {
             const isSelected = j.jornadaNumber === selectedJornadaNumber;
             return (
               <button
@@ -244,6 +381,36 @@ export const QuinielaView: React.FC = () => {
                 <div className="text-[10px] text-slate-500 mt-0.5 truncate">
                   {j.dateRange}
                 </div>
+
+                {/* Pre-evaluation badge for currently selected strategy */}
+                {jornadasStatusMap.has(j.jornadaNumber) && (() => {
+                  const st = jornadasStatusMap.get(j.jornadaNumber)!;
+                  if (st.isProfitable) {
+                    return (
+                      <div className="mt-1.5">
+                        <span className="inline-flex items-center gap-1 text-[9px] font-black px-1.5 py-0.5 rounded bg-emerald-500/25 text-emerald-300 border border-emerald-500/40 shadow-sm shadow-emerald-500/20">
+                          {st.hits} ac. (+{st.profit.toFixed(0)}€)
+                        </span>
+                      </div>
+                    );
+                  }
+                  if (st.hits === 10) {
+                    return (
+                      <div className="mt-1.5">
+                        <span className="inline-flex items-center gap-1 text-[9px] font-bold px-1.5 py-0.5 rounded bg-sky-500/20 text-sky-300 border border-sky-500/30">
+                          10 ac. ({st.won.toFixed(1)}€)
+                        </span>
+                      </div>
+                    );
+                  }
+                  return (
+                    <div className="mt-1.5">
+                      <span className="text-[9px] font-medium text-slate-500">
+                        {st.hits} aciertos (0€)
+                      </span>
+                    </div>
+                  );
+                })()}
               </button>
             );
           })}
@@ -262,36 +429,74 @@ export const QuinielaView: React.FC = () => {
           </span>
         </div>
 
-        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-2.5">
+        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-5 gap-3">
           {STRATEGIES_LIST.map(st => {
             const isSelected = st.id === selectedStrategy;
+            const perf = strategiesPerformance[st.id];
+
             return (
               <div
                 key={st.id}
                 onClick={() => setSelectedStrategy(st.id)}
-                className={`p-3.5 rounded-xl border cursor-pointer transition-all ${
+                className={`p-3.5 rounded-xl border cursor-pointer transition-all flex flex-col justify-between ${
                   isSelected
-                    ? 'bg-rose-500/15 border-rose-500 text-white shadow-md shadow-rose-500/20'
+                    ? 'bg-rose-500/15 border-rose-500 text-white shadow-md shadow-rose-500/20 ring-1 ring-rose-500/30'
                     : 'bg-slate-900/80 border-slate-800 text-slate-400 hover:text-slate-200 hover:bg-slate-800/60'
                 }`}
               >
-                <div className="flex items-center justify-between mb-1.5">
-                  <span className="text-xs font-bold text-white">
-                    {st.name}
-                  </span>
-                  <span className={`text-[10px] font-bold px-1.5 py-0.5 rounded ${
-                    st.riskLevel === 'Bajo'
-                      ? 'bg-emerald-500/20 text-emerald-400 border border-emerald-500/30'
-                      : st.riskLevel === 'Medio'
-                      ? 'bg-sky-500/20 text-sky-400 border border-sky-500/30'
-                      : 'bg-amber-500/20 text-amber-400 border border-amber-500/30'
-                  }`}>
-                    {st.badge}
-                  </span>
+                <div>
+                  <div className="flex items-center justify-between mb-1.5">
+                    <span className="text-xs font-bold text-white">
+                      {st.name}
+                    </span>
+                    <span className={`text-[10px] font-bold px-1.5 py-0.5 rounded ${
+                      st.riskLevel === 'Bajo'
+                        ? 'bg-emerald-500/20 text-emerald-400 border border-emerald-500/30'
+                        : st.riskLevel === 'Medio'
+                        ? 'bg-sky-500/20 text-sky-400 border border-sky-500/30'
+                        : 'bg-purple-500/20 text-purple-300 border border-purple-500/30'
+                    }`}>
+                      {st.badge}
+                    </span>
+                  </div>
+                  <p className="text-[11px] text-slate-400 leading-snug">
+                    {st.description}
+                  </p>
                 </div>
-                <p className="text-[11px] text-slate-400 leading-snug line-clamp-2">
-                  {st.description}
-                </p>
+
+                {/* Ganancias Acumuladas & Métricas */}
+                {perf && (
+                  <div className="mt-3 pt-2.5 border-t border-slate-800/80 flex flex-col gap-1.5">
+                    <div className="flex items-center justify-between">
+                      <span className="text-[10px] font-semibold text-slate-400 uppercase tracking-wide">
+                        Ganancia acum.:
+                      </span>
+                      <span className={`inline-flex items-center gap-1 text-xs font-black px-2 py-0.5 rounded ${
+                        perf.netProfit > 0
+                          ? 'bg-emerald-500/20 text-emerald-400 border border-emerald-500/30'
+                          : perf.netProfit < 0
+                          ? 'bg-rose-500/20 text-rose-400 border border-rose-500/30'
+                          : 'bg-slate-800 text-slate-300'
+                      }`}>
+                        {perf.netProfit > 0 ? (
+                          <TrendingUp className="w-3 h-3 text-emerald-400" />
+                        ) : perf.netProfit < 0 ? (
+                          <TrendingDown className="w-3 h-3 text-rose-400" />
+                        ) : null}
+                        {perf.netProfit > 0 ? `+${perf.netProfit.toFixed(2)} €` : `${perf.netProfit.toFixed(2)} €`}
+                      </span>
+                    </div>
+
+                    <div className="flex items-center justify-between text-[10px] text-slate-400">
+                      <span>ROI: <strong className={perf.roiPercentage >= 0 ? 'text-emerald-400' : 'text-rose-400'}>{perf.roiPercentage > 0 ? `+${perf.roiPercentage}%` : `${perf.roiPercentage}%`}</strong></span>
+                      <span>Media: <strong className="text-slate-200">{perf.avgHits} aciertos</strong></span>
+                    </div>
+
+                    <div className="text-[9px] text-slate-500 text-right">
+                      Premios: {perf.totalWon.toFixed(2)} € · Invertido: {perf.totalInvested.toFixed(2)} €
+                    </div>
+                  </div>
+                )}
               </div>
             );
           })}
@@ -421,9 +626,9 @@ export const QuinielaView: React.FC = () => {
               <span>{backtestResult ? 'Ver Resultado Escrutinio' : 'Simular Premios Reales'}</span>
             </button>
           ) : (
-            <div className="flex items-center gap-1.5 text-xs text-amber-400 bg-amber-500/10 px-3 py-1.5 rounded-xl border border-amber-500/20">
-              <span className="w-2 h-2 rounded-full bg-amber-400 animate-pulse"></span>
-              <span>Jornada en juego (escrutinio pendiente)</span>
+            <div className="flex items-center gap-1.5 text-xs text-sky-400 bg-sky-500/10 px-3 py-1.5 rounded-xl border border-sky-500/20">
+              <span className="w-2 h-2 rounded-full bg-sky-400 animate-pulse"></span>
+              <span>Modo predicción — apuesta generada lista abajo</span>
             </div>
           )}
         </div>
@@ -438,6 +643,18 @@ export const QuinielaView: React.FC = () => {
         onSelectPleno={handleSelectPleno}
         backtestResult={backtestResult}
       />
+
+      {/* 5. Prediction Panel — only for upcoming (non-completed) jornadas */}
+      {!currentJornadaData.isCompleted && basePicks.length > 0 && (
+        <QuinielaBetPredictionPanel
+          jornadaData={currentJornadaData}
+          reduction={currentReduction}
+          selectedStrategy={selectedStrategy}
+          basePicks={basePicks}
+          plenoPick={plenoPick}
+          generatedBets={generatedBets}
+        />
+      )}
 
       {/* Modals */}
       {backtestResult && (

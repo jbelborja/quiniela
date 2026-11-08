@@ -19,7 +19,7 @@ export const App: React.FC = () => {
                   La Quiniela Inteligente
                 </h1>
                 <span className="inline-flex items-center px-1.5 py-0.5 rounded text-[10px] font-bold bg-rose-500/20 text-rose-400 border border-rose-500/30">
-                  LaLiga 2024/25
+                  LaLiga 2026/27
                 </span>
               </div>
               <p className="text-[11px] text-slate-400 flex items-center gap-1.5 mt-0.5">
