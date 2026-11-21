@@ -8,6 +8,7 @@ import {
   QuinielaTicketPick,
   QuinielaTicket,
   JornadaQuinielaData,
+  JornadaScrutiny,
   BacktestResult,
   BetEvaluationDetail,
   StrategyAccumulatedStats
@@ -593,6 +594,64 @@ export function createReductionForBudget(budgetEur: number): ReductionConfig {
 // -------------------------------------------------------------
 // Backtesting & Scrutiny Evaluator
 // -------------------------------------------------------------
+
+/**
+ * Simulates real match results for an upcoming matchday using its match probabilities (Monte Carlo)
+ * and generates realistic scrutiny prizes based on standard SELAE prize pools.
+ */
+export function simulateJornadaScrutiny(jornadaData: JornadaQuinielaData): JornadaQuinielaData {
+  const simulatedMatches = jornadaData.matches.map(m => {
+    if (m.isPleno) {
+      const homeGoalsRoll = Math.random();
+      const awayGoalsRoll = Math.random();
+      const hG = (homeGoalsRoll < 0.4 ? '1' : homeGoalsRoll < 0.7 ? '2' : homeGoalsRoll < 0.85 ? '0' : 'M') as PlenoScore;
+      const aG = (awayGoalsRoll < 0.45 ? '1' : awayGoalsRoll < 0.75 ? '0' : awayGoalsRoll < 0.9 ? '2' : 'M') as PlenoScore;
+      return {
+        ...m,
+        realPleno: { home: hG, away: aG } as PlenoSelection,
+        realScore: {
+          home: hG === 'M' ? 3 : Number(hG),
+          away: aG === 'M' ? 3 : Number(aG)
+        }
+      };
+    }
+    const roll = Math.random() * 100;
+    const p1 = m.probabilities.p1;
+    const px = m.probabilities.px;
+    let sign: Sign1X2 = '1';
+    if (roll < p1) {
+      sign = '1';
+    } else if (roll < p1 + px) {
+      sign = 'X';
+    } else {
+      sign = '2';
+    }
+    return {
+      ...m,
+      realSign: sign
+    };
+  });
+
+  const simulatedScrutiny: JornadaScrutiny = {
+    recaudacion: 3840210.75,
+    bote: 1500000.00,
+    categories: {
+      p15: { category: '15', name: 'Pleno al 15', winners: 1, prizePerWinner: 1750000.00 },
+      p14: { category: '14', name: '14 Aciertos', winners: 3, prizePerWinner: 52100.50 },
+      p13: { category: '13', name: '13 Aciertos', winners: 82, prizePerWinner: 1350.20 },
+      p12: { category: '12', name: '12 Aciertos', winners: 1240, prizePerWinner: 104.80 },
+      p11: { category: '11', name: '11 Aciertos', winners: 11200, prizePerWinner: 15.60 },
+      p10: { category: '10', name: '10 Aciertos', winners: 48500, prizePerWinner: 3.50 }
+    }
+  };
+
+  return {
+    ...jornadaData,
+    isCompleted: true,
+    matches: simulatedMatches,
+    scrutiny: simulatedScrutiny
+  };
+}
 
 export function evaluateBacktest(
   ticket: QuinielaTicket,

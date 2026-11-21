@@ -114,6 +114,150 @@ export const OFFICIAL_REDUCTIONS: ReductionConfig[] = [
 
 export const JORNADAS_QUINIELA_DATA: JornadaQuinielaData[] = [
   {
+    jornadaNumber: 13,
+    season: '2024-2025',
+    title: 'Jornada 13 de LaLiga (Actual / En juego)',
+    dateRange: '8 - 10 nov 2024',
+    isCompleted: false,
+    matches: [
+      {
+        id: 'j13-1',
+        order: 1,
+        isPleno: false,
+        homeTeam: { id: 'rayo', name: 'Rayo Vallecano', shortName: 'Rayo', logo: 'https://a.espncdn.com/i/teamlogos/soccer/500/101.png' },
+        awayTeam: { id: 'laspalmas', name: 'UD Las Palmas', shortName: 'Las Palmas', logo: 'https://a.espncdn.com/i/teamlogos/soccer/500/98.png' },
+        stats: { homeRank: 9, awayRank: 18, homeForm: ['W', 'W', 'L', 'D', 'W'], awayForm: ['L', 'W', 'W', 'L', 'L'], homeGoalsAvg: 1.1, awayGoalsAvg: 1.1, h2hSummary: 'Vallecas con ambiente caliente' },
+        probabilities: { p1: 52, px: 29, p2: 19 }
+      },
+      {
+        id: 'j13-2',
+        order: 2,
+        isPleno: false,
+        homeTeam: { id: 'realmadrid', name: 'Real Madrid', shortName: 'R. Madrid', logo: 'https://a.espncdn.com/i/teamlogos/soccer/500/86.png' },
+        awayTeam: { id: 'osasuna', name: 'CA Osasuna', shortName: 'Osasuna', logo: 'https://a.espncdn.com/i/teamlogos/soccer/500/97.png' },
+        stats: { homeRank: 2, awayRank: 5, homeForm: ['L', 'W', 'W', 'D', 'W'], awayForm: ['W', 'W', 'L', 'W', 'D'], homeGoalsAvg: 2.1, awayGoalsAvg: 1.4, h2hSummary: 'El Madrid obligado a reaccionar tras el Clásico' },
+        probabilities: { p1: 74, px: 17, p2: 9 }
+      },
+      {
+        id: 'j13-3',
+        order: 3,
+        isPleno: false,
+        homeTeam: { id: 'villarreal', name: 'Villarreal CF', shortName: 'Villarreal', logo: 'https://a.espncdn.com/i/teamlogos/soccer/500/102.png' },
+        awayTeam: { id: 'alaves', name: 'Deportivo Alavés', shortName: 'Alavés', logo: 'https://a.espncdn.com/i/teamlogos/soccer/500/96.png' },
+        stats: { homeRank: 4, awayRank: 14, homeForm: ['W', 'D', 'L', 'W', 'W'], awayForm: ['W', 'L', 'L', 'L', 'L'], homeGoalsAvg: 1.9, awayGoalsAvg: 1.1, h2hSummary: 'El submarino amarillo fuerte en casa' },
+        probabilities: { p1: 65, px: 22, p2: 13 }
+      },
+      {
+        id: 'j13-4',
+        order: 4,
+        isPleno: false,
+        homeTeam: { id: 'leganes', name: 'CD Leganés', shortName: 'Leganés', logo: 'https://a.espncdn.com/i/teamlogos/soccer/500/989.png' },
+        awayTeam: { id: 'sevilla', name: 'Sevilla FC', shortName: 'Sevilla', logo: 'https://a.espncdn.com/i/teamlogos/soccer/500/243.png' },
+        stats: { homeRank: 15, awayRank: 13, homeForm: ['L', 'W', 'L', 'D', 'D'], awayForm: ['L', 'W', 'L', 'W', 'D'], homeGoalsAvg: 0.8, awayGoalsAvg: 1.0, h2hSummary: 'Butarque suele ser complicado para los visitantes' },
+        probabilities: { p1: 34, px: 35, p2: 31 }
+      },
+      {
+        id: 'j13-5',
+        order: 5,
+        isPleno: false,
+        homeTeam: { id: 'betis', name: 'Real Betis', shortName: 'Betis', logo: 'https://a.espncdn.com/i/teamlogos/soccer/500/244.png' },
+        awayTeam: { id: 'celta', name: 'RC Celta', shortName: 'Celta', logo: 'https://a.espncdn.com/i/teamlogos/soccer/500/85.png' },
+        stats: { homeRank: 7, awayRank: 10, homeForm: ['D', 'W', 'W', 'L', 'D'], awayForm: ['W', 'L', 'L', 'W', 'D'], homeGoalsAvg: 1.2, awayGoalsAvg: 1.6, h2hSummary: 'Duelo vibrante con buen trato de balón' },
+        probabilities: { p1: 51, px: 28, p2: 21 }
+      },
+      {
+        id: 'j13-6',
+        order: 6,
+        isPleno: false,
+        homeTeam: { id: 'mallorca', name: 'RCD Mallorca', shortName: 'Mallorca', logo: 'https://a.espncdn.com/i/teamlogos/soccer/500/84.png' },
+        awayTeam: { id: 'atm', name: 'Atlético de Madrid', shortName: 'Atlético', logo: 'https://a.espncdn.com/i/teamlogos/soccer/500/1068.png' },
+        stats: { homeRank: 8, awayRank: 3, homeForm: ['L', 'D', 'W', 'L', 'W'], awayForm: ['W', 'L', 'W', 'D', 'W'], homeGoalsAvg: 0.9, awayGoalsAvg: 1.5, h2hSummary: 'Son Moix siempre exige el 100% al Atleti' },
+        probabilities: { p1: 27, px: 33, p2: 40 }
+      },
+      {
+        id: 'j13-7',
+        order: 7,
+        isPleno: false,
+        homeTeam: { id: 'getafe', name: 'Getafe CF', shortName: 'Getafe', logo: 'https://a.espncdn.com/i/teamlogos/soccer/500/92.png' },
+        awayTeam: { id: 'girona', name: 'Girona FC', shortName: 'Girona', logo: 'https://a.espncdn.com/i/teamlogos/soccer/500/9812.png' },
+        stats: { homeRank: 16, awayRank: 11, homeForm: ['L', 'D', 'D', 'W', 'L'], awayForm: ['W', 'L', 'W', 'L', 'D'], homeGoalsAvg: 0.7, awayGoalsAvg: 1.3, h2hSummary: 'Contraste entre bloque bajo y juego posicional' },
+        probabilities: { p1: 37, px: 34, p2: 29 }
+      },
+      {
+        id: 'j13-8',
+        order: 8,
+        isPleno: false,
+        homeTeam: { id: 'valladolid', name: 'Real Valladolid', shortName: 'Valladolid', logo: 'https://a.espncdn.com/i/teamlogos/soccer/500/102.png' },
+        awayTeam: { id: 'athletic', name: 'Athletic Club', shortName: 'Athletic', logo: 'https://a.espncdn.com/i/teamlogos/soccer/500/93.png' },
+        stats: { homeRank: 19, awayRank: 6, homeForm: ['L', 'L', 'W', 'L', 'L'], awayForm: ['D', 'D', 'W', 'L', 'D'], homeGoalsAvg: 0.8, awayGoalsAvg: 1.6, h2hSummary: 'Athletic favorito por calidad individual' },
+        probabilities: { p1: 21, px: 29, p2: 50 }
+      },
+      {
+        id: 'j13-9',
+        order: 9,
+        isPleno: false,
+        homeTeam: { id: 'realsociedad', name: 'Real Sociedad', shortName: 'R. Sociedad', logo: 'https://a.espncdn.com/i/teamlogos/soccer/500/89.png' },
+        awayTeam: { id: 'barcelona', name: 'FC Barcelona', shortName: 'Barcelona', logo: 'https://a.espncdn.com/i/teamlogos/soccer/500/83.png' },
+        stats: { homeRank: 11, awayRank: 1, homeForm: ['W', 'L', 'W', 'D', 'W'], awayForm: ['W', 'W', 'W', 'W', 'W'], homeGoalsAvg: 1.1, awayGoalsAvg: 3.3, h2hSummary: 'Prueba de fuego para el líder en Anoeta' },
+        probabilities: { p1: 24, px: 27, p2: 49 }
+      },
+      {
+        id: 'j13-10',
+        order: 10,
+        isPleno: false,
+        homeTeam: { id: 'sporting', name: 'Real Sporting', shortName: 'Sporting', logo: 'https://a.espncdn.com/i/teamlogos/soccer/500/95.png' },
+        awayTeam: { id: 'granada', name: 'Granada CF', shortName: 'Granada', logo: 'https://a.espncdn.com/i/teamlogos/soccer/500/3747.png' },
+        stats: { homeRank: 4, awayRank: 5, homeForm: ['W', 'W', 'W', 'W', 'L'], awayForm: ['L', 'W', 'W', 'W', 'W'], homeGoalsAvg: 1.6, awayGoalsAvg: 1.6, h2hSummary: 'Dos aspirantes al ascenso cara a cara' },
+        probabilities: { p1: 46, px: 30, p2: 24 }
+      },
+      {
+        id: 'j13-11',
+        order: 11,
+        isPleno: false,
+        homeTeam: { id: 'santander', name: 'Racing de Santander', shortName: 'Racing', logo: 'https://a.espncdn.com/i/teamlogos/soccer/500/87.png' },
+        awayTeam: { id: 'burgos', name: 'Burgos CF', shortName: 'Burgos', logo: 'https://a.espncdn.com/i/teamlogos/soccer/500/6908.png' },
+        stats: { homeRank: 1, awayRank: 12, homeForm: ['D', 'W', 'W', 'W', 'W'], awayForm: ['L', 'L', 'D', 'L', 'L'], homeGoalsAvg: 1.9, awayGoalsAvg: 0.9, h2hSummary: 'Derbi regional con El Sardinero lleno' },
+        probabilities: { p1: 66, px: 22, p2: 12 }
+      },
+      {
+        id: 'j13-12',
+        order: 12,
+        isPleno: false,
+        homeTeam: { id: 'cadiz', name: 'Cádiz CF', shortName: 'Cádiz', logo: 'https://a.espncdn.com/i/teamlogos/soccer/500/87.png' },
+        awayTeam: { id: 'cordoba', name: 'Córdoba CF', shortName: 'Córdoba', logo: 'https://a.espncdn.com/i/teamlogos/soccer/500/105.png' },
+        stats: { homeRank: 17, awayRank: 15, homeForm: ['L', 'W', 'L', 'D', 'L'], awayForm: ['W', 'L', 'W', 'D', 'L'], homeGoalsAvg: 1.0, awayGoalsAvg: 1.0, h2hSummary: 'Derbi andaluz de urgencias' },
+        probabilities: { p1: 44, px: 32, p2: 24 }
+      },
+      {
+        id: 'j13-13',
+        order: 13,
+        isPleno: false,
+        homeTeam: { id: 'eibar', name: 'SD Eibar', shortName: 'Eibar', logo: 'https://a.espncdn.com/i/teamlogos/soccer/500/91.png' },
+        awayTeam: { id: 'racingferrol', name: 'Racing de Ferrol', shortName: 'Ferrol', logo: 'https://a.espncdn.com/i/teamlogos/soccer/500/94.png' },
+        stats: { homeRank: 9, awayRank: 20, homeForm: ['W', 'L', 'W', 'L', 'W'], awayForm: ['D', 'D', 'W', 'D', 'W'], homeGoalsAvg: 1.1, awayGoalsAvg: 0.8, h2hSummary: 'Ipurúa siempre empuja fuerte' },
+        probabilities: { p1: 53, px: 29, p2: 18 }
+      },
+      {
+        id: 'j13-14',
+        order: 14,
+        isPleno: false,
+        homeTeam: { id: 'albacete', name: 'Albacete Balompié', shortName: 'Albacete', logo: 'https://a.espncdn.com/i/teamlogos/soccer/500/90.png' },
+        awayTeam: { id: 'oviedo', name: 'Real Oviedo', shortName: 'Oviedo', logo: 'https://a.espncdn.com/i/teamlogos/soccer/500/242.png' },
+        stats: { homeRank: 14, awayRank: 6, homeForm: ['D', 'D', 'D', 'L', 'W'], awayForm: ['W', 'L', 'D', 'D', 'W'], homeGoalsAvg: 1.3, awayGoalsAvg: 1.2, h2hSummary: 'El Carlos Belmonte garantiza goles' },
+        probabilities: { p1: 36, px: 34, p2: 30 }
+      },
+      {
+        id: 'j13-15',
+        order: 15,
+        isPleno: true,
+        homeTeam: { id: 'espanyol', name: 'RCD Espanyol', shortName: 'Espanyol', logo: 'https://a.espncdn.com/i/teamlogos/soccer/500/88.png' },
+        awayTeam: { id: 'valencia', name: 'Valencia CF', shortName: 'Valencia', logo: 'https://a.espncdn.com/i/teamlogos/soccer/500/94.png' },
+        stats: { homeRank: 17, awayRank: 20, homeForm: ['L', 'L', 'L', 'W', 'L'], awayForm: ['D', 'L', 'D', 'L', 'D'], homeGoalsAvg: 0.9, awayGoalsAvg: 0.7, h2hSummary: 'Duelo a cara de perro por el descenso' },
+        probabilities: { p1: 41, px: 34, p2: 25 }
+      }
+    ]
+  },
+  {
     jornadaNumber: 12,
     season: '2024-2025',
     title: 'Jornada 12 de LaLiga',
@@ -268,7 +412,7 @@ export const JORNADAS_QUINIELA_DATA: JornadaQuinielaData[] = [
         id: 'j12-13',
         order: 13,
         isPleno: false,
-        homeTeam: { id: 'santander', name: 'Racing de Santander', shortName: 'Racing', logo: 'https://a.espncdn.com/i/teamlogos/soccer/500/94.png' },
+        homeTeam: { id: 'santander', name: 'Racing de Santander', shortName: 'Racing', logo: 'https://a.espncdn.com/i/teamlogos/soccer/500/87.png' },
         awayTeam: { id: 'albacete', name: 'Albacete Balompié', shortName: 'Albacete', logo: 'https://a.espncdn.com/i/teamlogos/soccer/500/90.png' },
         realScore: { home: 1, away: 1 },
         realSign: 'X',
@@ -379,7 +523,7 @@ export const JORNADAS_QUINIELA_DATA: JornadaQuinielaData[] = [
         order: 6,
         isPleno: false,
         homeTeam: { id: 'getafe', name: 'Getafe CF', shortName: 'Getafe', logo: 'https://a.espncdn.com/i/teamlogos/soccer/500/92.png' },
-        awayTeam: { id: 'valencia', name: 'Valencia CF', shortName: 'Valencia', logo: 'https://a.espncdn.com/i/teamlogos/soccer/500/95.png' },
+        awayTeam: { id: 'valencia', name: 'Valencia CF', shortName: 'Valencia', logo: 'https://a.espncdn.com/i/teamlogos/soccer/500/94.png' },
         realScore: { home: 1, away: 1 },
         realSign: 'X',
         stats: { homeRank: 16, awayRank: 20, homeForm: ['D', 'W', 'L', 'D', 'L'], awayForm: ['L', 'D', 'L', 'D', 'W'], homeGoalsAvg: 0.8, awayGoalsAvg: 0.7, h2hSummary: 'Bordalás vs Baraja, clásico duelo táctico' },
@@ -466,7 +610,7 @@ export const JORNADAS_QUINIELA_DATA: JornadaQuinielaData[] = [
         id: 'j11-14',
         order: 14,
         isPleno: false,
-        homeTeam: { id: 'santander', name: 'Racing Santander', shortName: 'Racing', logo: 'https://a.espncdn.com/i/teamlogos/soccer/500/94.png' },
+        homeTeam: { id: 'santander', name: 'Racing Santander', shortName: 'Racing', logo: 'https://a.espncdn.com/i/teamlogos/soccer/500/87.png' },
         awayTeam: { id: 'cordoba', name: 'Córdoba CF', shortName: 'Córdoba', logo: 'https://a.espncdn.com/i/teamlogos/soccer/500/105.png' },
         realScore: { home: 2, away: 0 },
         realSign: '1',
@@ -598,7 +742,7 @@ export const JORNADAS_QUINIELA_DATA: JornadaQuinielaData[] = [
         id: 'j10-9',
         order: 9,
         isPleno: false,
-        homeTeam: { id: 'valencia', name: 'Valencia CF', shortName: 'Valencia', logo: 'https://a.espncdn.com/i/teamlogos/soccer/500/95.png' },
+        homeTeam: { id: 'valencia', name: 'Valencia CF', shortName: 'Valencia', logo: 'https://a.espncdn.com/i/teamlogos/soccer/500/94.png' },
         awayTeam: { id: 'laspalmas', name: 'UD Las Palmas', shortName: 'Las Palmas', logo: 'https://a.espncdn.com/i/teamlogos/soccer/500/98.png' },
         realScore: { home: 2, away: 3 },
         realSign: '2',
@@ -643,7 +787,7 @@ export const JORNADAS_QUINIELA_DATA: JornadaQuinielaData[] = [
         order: 13,
         isPleno: false,
         homeTeam: { id: 'cadiz', name: 'Cádiz CF', shortName: 'Cádiz', logo: 'https://a.espncdn.com/i/teamlogos/soccer/500/87.png' },
-        awayTeam: { id: 'santander', name: 'Racing de Santander', shortName: 'Racing', logo: 'https://a.espncdn.com/i/teamlogos/soccer/500/94.png' },
+        awayTeam: { id: 'santander', name: 'Racing de Santander', shortName: 'Racing', logo: 'https://a.espncdn.com/i/teamlogos/soccer/500/87.png' },
         realScore: { home: 0, away: 1 },
         realSign: '2',
         stats: { homeRank: 17, awayRank: 1, homeForm: ['D', 'L', 'L', 'W', 'L'], awayForm: ['W', 'W', 'W', 'L', 'W'], homeGoalsAvg: 1.0, awayGoalsAvg: 1.9, h2hSummary: 'El líder no perdonó' },
@@ -698,7 +842,7 @@ export const JORNADAS_QUINIELA_DATA: JornadaQuinielaData[] = [
         order: 1,
         isPleno: false,
         homeTeam: { id: 'leganes', name: 'CD Leganés', shortName: 'Leganés', logo: 'https://a.espncdn.com/i/teamlogos/soccer/500/989.png' },
-        awayTeam: { id: 'valencia', name: 'Valencia CF', shortName: 'Valencia', logo: 'https://a.espncdn.com/i/teamlogos/soccer/500/95.png' },
+        awayTeam: { id: 'valencia', name: 'Valencia CF', shortName: 'Valencia', logo: 'https://a.espncdn.com/i/teamlogos/soccer/500/94.png' },
         realScore: { home: 0, away: 0 },
         realSign: 'X',
         stats: { homeRank: 16, awayRank: 18, homeForm: ['D', 'D', 'L', 'D', 'L'], awayForm: ['L', 'D', 'W', 'L', 'L'], homeGoalsAvg: 0.6, awayGoalsAvg: 0.6, h2hSummary: 'Partido cerrado y con poco riesgo' },
@@ -808,7 +952,7 @@ export const JORNADAS_QUINIELA_DATA: JornadaQuinielaData[] = [
         order: 11,
         isPleno: false,
         homeTeam: { id: 'zaragoza', name: 'Real Zaragoza', shortName: 'Zaragoza', logo: 'https://a.espncdn.com/i/teamlogos/soccer/500/99.png' },
-        awayTeam: { id: 'santander', name: 'Racing de Santander', shortName: 'Racing', logo: 'https://a.espncdn.com/i/teamlogos/soccer/500/94.png' },
+        awayTeam: { id: 'santander', name: 'Racing de Santander', shortName: 'Racing', logo: 'https://a.espncdn.com/i/teamlogos/soccer/500/87.png' },
         realScore: { home: 2, away: 3 },
         realSign: '2',
         stats: { homeRank: 3, awayRank: 1, homeForm: ['W', 'L', 'W', 'L', 'W'], awayForm: ['W', 'W', 'L', 'W', 'W'], homeGoalsAvg: 1.8, awayGoalsAvg: 1.9, h2hSummary: 'Partidazo por la cima de LaLiga' },
@@ -858,150 +1002,6 @@ export const JORNADAS_QUINIELA_DATA: JornadaQuinielaData[] = [
         realPleno: { home: '2', away: '0' },
         stats: { homeRank: 2, awayRank: 4, homeForm: ['D', 'W', 'W', 'W', 'D'], awayForm: ['W', 'W', 'L', 'W', 'W'], homeGoalsAvg: 2.1, awayGoalsAvg: 2.1, h2hSummary: 'Valverde y Vinicius decidieron en el Bernabéu' },
         probabilities: { p1: 66, px: 20, p2: 14 }
-      }
-    ]
-  },
-  {
-    jornadaNumber: 13,
-    season: '2024-2025',
-    title: 'Jornada 13 de LaLiga (Actual / En juego)',
-    dateRange: '8 - 10 nov 2024',
-    isCompleted: false,
-    matches: [
-      {
-        id: 'j13-1',
-        order: 1,
-        isPleno: false,
-        homeTeam: { id: 'rayo', name: 'Rayo Vallecano', shortName: 'Rayo', logo: 'https://a.espncdn.com/i/teamlogos/soccer/500/101.png' },
-        awayTeam: { id: 'laspalmas', name: 'UD Las Palmas', shortName: 'Las Palmas', logo: 'https://a.espncdn.com/i/teamlogos/soccer/500/98.png' },
-        stats: { homeRank: 9, awayRank: 18, homeForm: ['W', 'W', 'L', 'D', 'W'], awayForm: ['L', 'W', 'W', 'L', 'L'], homeGoalsAvg: 1.1, awayGoalsAvg: 1.1, h2hSummary: 'Vallecas con ambiente caliente' },
-        probabilities: { p1: 52, px: 29, p2: 19 }
-      },
-      {
-        id: 'j13-2',
-        order: 2,
-        isPleno: false,
-        homeTeam: { id: 'realmadrid', name: 'Real Madrid', shortName: 'R. Madrid', logo: 'https://a.espncdn.com/i/teamlogos/soccer/500/86.png' },
-        awayTeam: { id: 'osasuna', name: 'CA Osasuna', shortName: 'Osasuna', logo: 'https://a.espncdn.com/i/teamlogos/soccer/500/97.png' },
-        stats: { homeRank: 2, awayRank: 5, homeForm: ['L', 'W', 'W', 'D', 'W'], awayForm: ['W', 'W', 'L', 'W', 'D'], homeGoalsAvg: 2.1, awayGoalsAvg: 1.4, h2hSummary: 'El Madrid obligado a reaccionar tras el Clásico' },
-        probabilities: { p1: 74, px: 17, p2: 9 }
-      },
-      {
-        id: 'j13-3',
-        order: 3,
-        isPleno: false,
-        homeTeam: { id: 'villarreal', name: 'Villarreal CF', shortName: 'Villarreal', logo: 'https://a.espncdn.com/i/teamlogos/soccer/500/102.png' },
-        awayTeam: { id: 'alaves', name: 'Deportivo Alavés', shortName: 'Alavés', logo: 'https://a.espncdn.com/i/teamlogos/soccer/500/96.png' },
-        stats: { homeRank: 4, awayRank: 14, homeForm: ['W', 'D', 'L', 'W', 'W'], awayForm: ['W', 'L', 'L', 'L', 'L'], homeGoalsAvg: 1.9, awayGoalsAvg: 1.1, h2hSummary: 'El submarino amarillo fuerte en casa' },
-        probabilities: { p1: 65, px: 22, p2: 13 }
-      },
-      {
-        id: 'j13-4',
-        order: 4,
-        isPleno: false,
-        homeTeam: { id: 'leganes', name: 'CD Leganés', shortName: 'Leganés', logo: 'https://a.espncdn.com/i/teamlogos/soccer/500/989.png' },
-        awayTeam: { id: 'sevilla', name: 'Sevilla FC', shortName: 'Sevilla', logo: 'https://a.espncdn.com/i/teamlogos/soccer/500/243.png' },
-        stats: { homeRank: 15, awayRank: 13, homeForm: ['L', 'W', 'L', 'D', 'D'], awayForm: ['L', 'W', 'L', 'W', 'D'], homeGoalsAvg: 0.8, awayGoalsAvg: 1.0, h2hSummary: 'Butarque suele ser complicado para los visitantes' },
-        probabilities: { p1: 34, px: 35, p2: 31 }
-      },
-      {
-        id: 'j13-5',
-        order: 5,
-        isPleno: false,
-        homeTeam: { id: 'betis', name: 'Real Betis', shortName: 'Betis', logo: 'https://a.espncdn.com/i/teamlogos/soccer/500/244.png' },
-        awayTeam: { id: 'celta', name: 'RC Celta', shortName: 'Celta', logo: 'https://a.espncdn.com/i/teamlogos/soccer/500/85.png' },
-        stats: { homeRank: 7, awayRank: 10, homeForm: ['D', 'W', 'W', 'L', 'D'], awayForm: ['W', 'L', 'L', 'W', 'D'], homeGoalsAvg: 1.2, awayGoalsAvg: 1.6, h2hSummary: 'Duelo vibrante con buen trato de balón' },
-        probabilities: { p1: 51, px: 28, p2: 21 }
-      },
-      {
-        id: 'j13-6',
-        order: 6,
-        isPleno: false,
-        homeTeam: { id: 'mallorca', name: 'RCD Mallorca', shortName: 'Mallorca', logo: 'https://a.espncdn.com/i/teamlogos/soccer/500/84.png' },
-        awayTeam: { id: 'atm', name: 'Atlético de Madrid', shortName: 'Atlético', logo: 'https://a.espncdn.com/i/teamlogos/soccer/500/1068.png' },
-        stats: { homeRank: 8, awayRank: 3, homeForm: ['L', 'D', 'W', 'L', 'W'], awayForm: ['W', 'L', 'W', 'D', 'W'], homeGoalsAvg: 0.9, awayGoalsAvg: 1.5, h2hSummary: 'Son Moix siempre exige el 100% al Atleti' },
-        probabilities: { p1: 27, px: 33, p2: 40 }
-      },
-      {
-        id: 'j13-7',
-        order: 7,
-        isPleno: false,
-        homeTeam: { id: 'getafe', name: 'Getafe CF', shortName: 'Getafe', logo: 'https://a.espncdn.com/i/teamlogos/soccer/500/92.png' },
-        awayTeam: { id: 'girona', name: 'Girona FC', shortName: 'Girona', logo: 'https://a.espncdn.com/i/teamlogos/soccer/500/9812.png' },
-        stats: { homeRank: 16, awayRank: 11, homeForm: ['L', 'D', 'D', 'W', 'L'], awayForm: ['W', 'L', 'W', 'L', 'D'], homeGoalsAvg: 0.7, awayGoalsAvg: 1.3, h2hSummary: 'Contraste entre bloque bajo y juego posicional' },
-        probabilities: { p1: 37, px: 34, p2: 29 }
-      },
-      {
-        id: 'j13-8',
-        order: 8,
-        isPleno: false,
-        homeTeam: { id: 'valladolid', name: 'Real Valladolid', shortName: 'Valladolid', logo: 'https://a.espncdn.com/i/teamlogos/soccer/500/102.png' },
-        awayTeam: { id: 'athletic', name: 'Athletic Club', shortName: 'Athletic', logo: 'https://a.espncdn.com/i/teamlogos/soccer/500/93.png' },
-        stats: { homeRank: 19, awayRank: 6, homeForm: ['L', 'L', 'W', 'L', 'L'], awayForm: ['D', 'D', 'W', 'L', 'D'], homeGoalsAvg: 0.8, awayGoalsAvg: 1.6, h2hSummary: 'Athletic favorito por calidad individual' },
-        probabilities: { p1: 21, px: 29, p2: 50 }
-      },
-      {
-        id: 'j13-9',
-        order: 9,
-        isPleno: false,
-        homeTeam: { id: 'realsociedad', name: 'Real Sociedad', shortName: 'R. Sociedad', logo: 'https://a.espncdn.com/i/teamlogos/soccer/500/89.png' },
-        awayTeam: { id: 'barcelona', name: 'FC Barcelona', shortName: 'Barcelona', logo: 'https://a.espncdn.com/i/teamlogos/soccer/500/83.png' },
-        stats: { homeRank: 11, awayRank: 1, homeForm: ['W', 'L', 'W', 'D', 'W'], awayForm: ['W', 'W', 'W', 'W', 'W'], homeGoalsAvg: 1.1, awayGoalsAvg: 3.3, h2hSummary: 'Prueba de fuego para el líder en Anoeta' },
-        probabilities: { p1: 24, px: 27, p2: 49 }
-      },
-      {
-        id: 'j13-10',
-        order: 10,
-        isPleno: false,
-        homeTeam: { id: 'sporting', name: 'Real Sporting', shortName: 'Sporting', logo: 'https://a.espncdn.com/i/teamlogos/soccer/500/95.png' },
-        awayTeam: { id: 'granada', name: 'Granada CF', shortName: 'Granada', logo: 'https://a.espncdn.com/i/teamlogos/soccer/500/3747.png' },
-        stats: { homeRank: 4, awayRank: 5, homeForm: ['W', 'W', 'W', 'W', 'L'], awayForm: ['L', 'W', 'W', 'W', 'W'], homeGoalsAvg: 1.6, awayGoalsAvg: 1.6, h2hSummary: 'Dos aspirantes al ascenso cara a cara' },
-        probabilities: { p1: 46, px: 30, p2: 24 }
-      },
-      {
-        id: 'j13-11',
-        order: 11,
-        isPleno: false,
-        homeTeam: { id: 'santander', name: 'Racing de Santander', shortName: 'Racing', logo: 'https://a.espncdn.com/i/teamlogos/soccer/500/94.png' },
-        awayTeam: { id: 'burgos', name: 'Burgos CF', shortName: 'Burgos', logo: 'https://a.espncdn.com/i/teamlogos/soccer/500/6908.png' },
-        stats: { homeRank: 1, awayRank: 12, homeForm: ['D', 'W', 'W', 'W', 'W'], awayForm: ['L', 'L', 'D', 'L', 'L'], homeGoalsAvg: 1.9, awayGoalsAvg: 0.9, h2hSummary: 'Derbi regional con El Sardinero lleno' },
-        probabilities: { p1: 66, px: 22, p2: 12 }
-      },
-      {
-        id: 'j13-12',
-        order: 12,
-        isPleno: false,
-        homeTeam: { id: 'cadiz', name: 'Cádiz CF', shortName: 'Cádiz', logo: 'https://a.espncdn.com/i/teamlogos/soccer/500/87.png' },
-        awayTeam: { id: 'cordoba', name: 'Córdoba CF', shortName: 'Córdoba', logo: 'https://a.espncdn.com/i/teamlogos/soccer/500/105.png' },
-        stats: { homeRank: 17, awayRank: 15, homeForm: ['L', 'W', 'L', 'D', 'L'], awayForm: ['W', 'L', 'W', 'D', 'L'], homeGoalsAvg: 1.0, awayGoalsAvg: 1.0, h2hSummary: 'Derbi andaluz de urgencias' },
-        probabilities: { p1: 44, px: 32, p2: 24 }
-      },
-      {
-        id: 'j13-13',
-        order: 13,
-        isPleno: false,
-        homeTeam: { id: 'eibar', name: 'SD Eibar', shortName: 'Eibar', logo: 'https://a.espncdn.com/i/teamlogos/soccer/500/91.png' },
-        awayTeam: { id: 'racingferrol', name: 'Racing de Ferrol', shortName: 'Ferrol', logo: 'https://a.espncdn.com/i/teamlogos/soccer/500/94.png' },
-        stats: { homeRank: 9, awayRank: 20, homeForm: ['W', 'L', 'W', 'L', 'W'], awayForm: ['D', 'D', 'W', 'D', 'W'], homeGoalsAvg: 1.1, awayGoalsAvg: 0.8, h2hSummary: 'Ipurúa siempre empuja fuerte' },
-        probabilities: { p1: 53, px: 29, p2: 18 }
-      },
-      {
-        id: 'j13-14',
-        order: 14,
-        isPleno: false,
-        homeTeam: { id: 'albacete', name: 'Albacete Balompié', shortName: 'Albacete', logo: 'https://a.espncdn.com/i/teamlogos/soccer/500/90.png' },
-        awayTeam: { id: 'oviedo', name: 'Real Oviedo', shortName: 'Oviedo', logo: 'https://a.espncdn.com/i/teamlogos/soccer/500/242.png' },
-        stats: { homeRank: 14, awayRank: 6, homeForm: ['D', 'D', 'D', 'L', 'W'], awayForm: ['W', 'L', 'D', 'D', 'W'], homeGoalsAvg: 1.3, awayGoalsAvg: 1.2, h2hSummary: 'El Carlos Belmonte garantiza goles' },
-        probabilities: { p1: 36, px: 34, p2: 30 }
-      },
-      {
-        id: 'j13-15',
-        order: 15,
-        isPleno: true,
-        homeTeam: { id: 'espanyol', name: 'RCD Espanyol', shortName: 'Espanyol', logo: 'https://a.espncdn.com/i/teamlogos/soccer/500/88.png' },
-        awayTeam: { id: 'valencia', name: 'Valencia CF', shortName: 'Valencia', logo: 'https://a.espncdn.com/i/teamlogos/soccer/500/95.png' },
-        stats: { homeRank: 17, awayRank: 20, homeForm: ['L', 'L', 'L', 'W', 'L'], awayForm: ['D', 'L', 'D', 'L', 'D'], homeGoalsAvg: 0.9, awayGoalsAvg: 0.7, h2hSummary: 'Duelo a cara de perro por el descenso' },
-        probabilities: { p1: 41, px: 34, p2: 25 }
       }
     ]
   }

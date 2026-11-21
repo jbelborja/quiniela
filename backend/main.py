@@ -58,11 +58,11 @@ def team_logo(team_name: str) -> str:
     ESPN_IDS = {
         "Real Madrid": "86", "Barcelona": "83", "Ath Madrid": "1068", "Atletico Madrid": "1068",
         "Sevilla": "243", "Betis": "244", "Villarreal": "102", "Ath Bilbao": "93", "Athletic Club": "93",
-        "Sociedad": "89", "Real Sociedad": "89", "Osasuna": "97", "Valencia": "95", "Getafe": "92",
+        "Sociedad": "89", "Real Sociedad": "89", "Osasuna": "97", "Valencia": "94", "Getafe": "92",
         "Girona": "9812", "Celta": "85", "Rayo Vallecano": "101", "Las Palmas": "98", "Alaves": "96",
         "Leganes": "989", "Espanyol": "88", "Mallorca": "84", "Valladolid": "100", "Cadiz": "87",
         "Granada": "3747", "Almeria": "103", "Elche": "3751", "Levante": "100", "Eibar": "91",
-        "Sporting Gijon": "95", "Oviedo": "242", "Zaragoza": "99", "Santander": "94", "Tenerife": "104",
+        "Sporting Gijon": "95", "Oviedo": "242", "Zaragoza": "99", "Santander": "87", "Tenerife": "104",
         "Burgos": "6908", "Albacete": "90", "Malaga": "241", "Huesca": "105", "Cartagena": "6909",
         "Castellon": "106", "Cordoba": "107", "Deportivo": "94", "La Coruna": "94",
     }
@@ -105,6 +105,8 @@ def list_jornadas():
                 "title": j["title"],
                 "dateRange": j["dateRange"],
                 "isCompleted": j["isCompleted"],
+                "isUpcoming": j.get("isUpcoming", False),
+                "dataSource": j.get("dataSource", "football-data.co.uk"),
             }
             for j in jornadas
         ]
@@ -146,13 +148,13 @@ def format_jornada(found: dict) -> dict:
                 "id": m["home"].lower().replace(" ", "_"),
                 "name": m["home"],
                 "shortName": m["home"],
-                "logo": team_logo(m["home"]),
+                "logo": m.get("home_logo") or team_logo(m["home"]),
             },
             "awayTeam": {
                 "id": m["away"].lower().replace(" ", "_"),
                 "name": m["away"],
                 "shortName": m["away"],
-                "logo": team_logo(m["away"]),
+                "logo": m.get("away_logo") or team_logo(m["away"]),
             },
             "realScore": real_score,
             "realSign": m["real_sign"],
@@ -188,7 +190,8 @@ def format_jornada(found: dict) -> dict:
         "title": found["title"],
         "dateRange": found["dateRange"],
         "isCompleted": found["isCompleted"],
-        "dataSource": "Real Live Feed (football-data.co.uk 2026/27)",
+        "isUpcoming": found.get("isUpcoming", False),
+        "dataSource": found.get("dataSource", "football-data.co.uk 2026/27"),
         "scrutiny": scrutiny,
         "matches": matches_out,
     }
@@ -210,11 +213,8 @@ def get_next_jornada():
     """Returns the next upcoming (non-completed) jornada for bet prediction."""
     try:
         jornadas = real_data.get_quiniela_jornadas()
-        # First jornada that is not completed (no real results yet)
-        found = next((j for j in jornadas if not j["isCompleted"]), None)
-        if not found:
-            # All completed — return the last one
-            found = jornadas[-1] if jornadas else None
+        # Select a matchday with fixtures still to be played.
+        found = next((j for j in jornadas if j.get("isUpcoming") and not j["isCompleted"]), None)
         if not found:
             raise HTTPException(status_code=404, detail="No hay jornadas disponibles")
         return format_jornada(found)

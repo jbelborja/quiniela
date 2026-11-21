@@ -15,6 +15,8 @@ export interface JornadaInfo {
   title: string;
   dateRange: string;
   isCompleted: boolean;
+  isUpcoming?: boolean;
+  dataSource?: string;
 }
 
 /** Fetch the list of available matchdays from the backend. */
@@ -53,8 +55,11 @@ export async function clearDataCache(): Promise<void> {
 
 /** Health-check: returns true if the backend is reachable. */
 export async function isBackendOnline(): Promise<boolean> {
+  if (typeof window !== 'undefined' && window.location.protocol === 'https:' && !import.meta.env.VITE_API_URL) {
+    return false;
+  }
   try {
-    const res = await fetch(`${API_BASE}/api/health`, { signal: AbortSignal.timeout(3000) });
+    const res = await fetch(`${API_BASE}/api/health`, { signal: AbortSignal.timeout(1500) });
     return res.ok;
   } catch {
     return false;

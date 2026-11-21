@@ -46,6 +46,7 @@ import { fetchJornadas, fetchJornada, fetchAllJornadasFull, isBackendOnline, Jor
 export const QuinielaView: React.FC = () => {
   // Static fallback data
   const staticJornadas = useMemo(() => getAllQuinielaJornadas(), []);
+  const liveDataRequired = typeof window !== 'undefined' && window.location.port === '3000';
 
   // Live data state
   const [liveJornadas, setLiveJornadas] = useState<JornadaInfo[] | null>(null);
@@ -53,6 +54,7 @@ export const QuinielaView: React.FC = () => {
   const [backendOnline, setBackendOnline] = useState<boolean | null>(null);
   const [loadingJornada, setLoadingJornada] = useState(false);
   const [liveJornadaData, setLiveJornadaData] = useState<JornadaQuinielaData | null>(null);
+  const [liveDataError, setLiveDataError] = useState<string | null>(null);
 
   // Active full collection of jornadas (live if available, else static)
   const activeJornadasCollection = useMemo(() => {
@@ -131,21 +133,30 @@ export const QuinielaView: React.FC = () => {
       if (online) {
         fetchJornadas()
           .then(list => {
-            setLiveJornadas(list);
-            if (list.length > 0) {
-              // Auto-select the first upcoming (non-completed) jornada, or last one
-              const nextUpcoming = list.find(item => !item.isCompleted);
-              setSelectedJornadaNumber(
-                nextUpcoming ? nextUpcoming.jornadaNumber : list[list.length - 1].jornadaNumber
-              );
+            if (list.length === 0) {
+              setLiveDataError('The backend returned no matchdays.');
+              return;
             }
+            setLiveJornadas(list);
+            // Auto-select the first upcoming (non-completed) jornada, or last one
+            const nextUpcoming =
+              list.find(item => item.dataSource === 'ESPN fixtures' && item.isUpcoming && !item.isCompleted) ??
+              list.find(item => item.isUpcoming && !item.isCompleted) ??
+              list.find(item => !item.isCompleted);
+            setSelectedJornadaNumber(
+              nextUpcoming ? nextUpcoming.jornadaNumber : list[list.length - 1].jornadaNumber
+            );
           })
-          .catch(err => console.warn('Could not fetch live jornadas list:', err));
+          .catch(err => {
+            console.warn('Could not fetch live jornadas list:', err);
+            setLiveDataError('Could not load matchdays from the backend.');
+          });
 
         fetchAllJornadasFull()
           .then(fullList => setAllLiveJornadas(fullList))
           .catch(err => console.warn('Could not fetch all live full jornadas:', err));
       } else {
+        setLiveDataError('The backend is not reachable. Start Docker Compose and reload the page.');
         // Static fallback: auto-select the first upcoming (non-completed) jornada
         const nextUpcomingStatic = staticJornadas.find(j => !j.isCompleted);
         if (nextUpcomingStatic) {
@@ -160,11 +171,16 @@ export const QuinielaView: React.FC = () => {
   useEffect(() => {
     if (!backendOnline) return;
     setLoadingJornada(true);
+    setLiveDataError(null);
     fetchJornada(selectedJornadaNumber)
-      .then(data => setLiveJornadaData(data))
+      .then(data => {
+        setLiveJornadaData(data);
+        setLiveDataError(null);
+      })
       .catch(err => {
-        console.warn('Live fetch failed, falling back to static:', err);
+        console.warn('Live fetch failed:', err);
         setLiveJornadaData(null);
+        setLiveDataError(`Could not load Jornada ${selectedJornadaNumber} from the backend.`);
       })
       .finally(() => setLoadingJornada(false));
   }, [selectedJornadaNumber, backendOnline]);
@@ -292,6 +308,37 @@ export const QuinielaView: React.FC = () => {
     totalBets: generatedBets.length,
     totalCost: currentReduction.coste
   };
+
+  const hasUpcomingLiveJornada = Boolean(
+    liveJornadas?.some(jornada => jornada.isUpcoming && !jornada.isCompleted)
+  );
+
+  if (liveDataRequired && (
+    backendOnline !== true ||
+    !liveJornadas?.length ||
+    !hasUpcomingLiveJornada ||
+    liveJornadaData?.jornadaNumber !== selectedJornadaNumber ||
+    loadingJornada
+  )) {
+    const message = liveDataError ??
+      (backendOnline !== true
+        ? 'The backend is not reachable. Start Docker Compose and reload the page.'
+        : !liveJornadas?.length
+          ? 'Loading matchdays from the backend…'
+          : !hasUpcomingLiveJornada
+            ? 'The backend has no scheduled upcoming fixtures yet.'
+            : 'Loading the next matchday…');
+    return (
+      <div className="max-w-7xl mx-auto px-3 sm:px-6 py-8">
+        <div className="flex items-center gap-3 rounded-xl border border-slate-800 bg-slate-900/80 p-5 text-sm text-slate-300">
+          {backendOnline === false || liveDataError
+            ? <WifiOff className="h-5 w-5 shrink-0 text-rose-400" />
+            : <Loader2 className="h-5 w-5 shrink-0 animate-spin text-rose-400" />}
+          <span>{message}</span>
+        </div>
+      </div>
+    );
+  }
 
   return (
     <div className="max-w-7xl mx-auto px-3 sm:px-6 py-4 space-y-5 animate-fade-in">
