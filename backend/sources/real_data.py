@@ -12,7 +12,6 @@ import csv
 import io
 import logging
 import re
-import statistics
 import unicodedata
 from concurrent.futures import ThreadPoolExecutor
 from datetime import date, datetime, timedelta
@@ -66,6 +65,10 @@ def _parse_date(date_str: str) -> datetime:
 
 def _week_start(day: date) -> date:
     return day - timedelta(days=day.weekday())
+
+
+def _round_window_start(day: date) -> date:
+    return day - timedelta(days=(day.weekday() - 4) % 7)
 
 
 def _normalize_team_name(name: str) -> str:
@@ -182,7 +185,7 @@ def _upcoming_round_number(league: str, matches: list[dict], week_start: date) -
     if not valid_counts:
         log.error("Cannot determine the upcoming %s matchday number; skipping its fixtures", league)
         return None
-    return int(statistics.median(valid_counts)) + 1
+    return max(valid_counts) + 1
 
 
 @lru_cache(maxsize=2)
@@ -431,19 +434,19 @@ def get_quiniela_jornadas() -> List[dict]:
 
     # football-data.co.uk updates results later and may not list future fixtures.
     # ESPN's scoreboard supplies scheduled fixtures so the next round remains predictable.
-    current_week = _week_start(today)
+    current_week = _round_window_start(today)
     espn_p1, espn_p2 = _fetch_upcoming_fixtures(
         current_week.isoformat(),
         datetime.now().strftime("%Y%m%d%H"),
     )
     weeks = sorted({
-        _week_start(match["date"])
+        _round_window_start(match["date"])
         for match in espn_p1 + espn_p2
-        if match["date"] >= today
+        if match["date"] >= current_week
     })
     for week in weeks:
-        week_p1 = [match for match in espn_p1 if _week_start(match["date"]) == week]
-        week_p2 = [match for match in espn_p2 if _week_start(match["date"]) == week]
+        week_p1 = [match for match in espn_p1 if _round_window_start(match["date"]) == week]
+        week_p2 = [match for match in espn_p2 if _round_window_start(match["date"]) == week]
         if len(week_p1) < 10 or len(week_p2) < 4:
             continue
         round_number = _upcoming_round_number("esp.1", week_p1, week)
